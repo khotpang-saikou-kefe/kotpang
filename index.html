@@ -16,7 +16,6 @@
     >
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -374,6 +373,40 @@
             background: #d8e8ef;
         }
 
+        /* สีของ 8 คลาสใหม่ */
+
+        .meringue {
+            background: #f6dff1;
+        }
+
+        .cookie {
+            background: #ead0b2;
+        }
+
+        .stuffed-bread {
+            background: #f0d3a5;
+        }
+
+        .cheesepie {
+            background: #dcefcf;
+        }
+
+        .banoffee {
+            background: #f3dfaa;
+        }
+
+        .decorate-cake {
+            background: #e8d5f3;
+        }
+
+        .mochi {
+            background: #f7d9dc;
+        }
+
+        .pineapple {
+            background: #f5e5a9;
+        }
+
         .course-content {
             padding: 22px;
         }
@@ -681,7 +714,7 @@
             }
 
             .nav-menu.active {
-                max-height: 300px;
+                max-height: 500px;
             }
 
             .nav-menu li {
@@ -856,7 +889,6 @@
                 padding-right: 15px;
             }
         }
-
     </style>
 </head>
 
@@ -1221,6 +1253,8 @@
 
         const COURSES = [
 
+            /* ===== คอร์สเดิม ===== */
+
             {
                 id: "donut",
                 name: "คอร์สโดนัท",
@@ -1291,6 +1325,81 @@
                     "เรียนทำเค้กป๊อปน่ารัก ๆ เหมาะสำหรับทำขายและทำเป็นของฝาก",
                 emoji: "🍡",
                 style: "cake-pop"
+            },
+
+
+            /* ===== 8 คลาสใหม่ ===== */
+
+            {
+                id: "color-meringue",
+                name: "คลาสเมอแรงค์หลากสี",
+                description:
+                    "เรียนทำเมอแรงค์หลากสี เนื้อเบาฟู พร้อมเทคนิคการบีบและอบให้สวย",
+                emoji: "🌈",
+                style: "meringue"
+            },
+
+            {
+                id: "cookie-3-friends",
+                name: "คลาส Cookie 3 สหาย",
+                description:
+                    "เรียนทำคุกกี้ 3 สไตล์ พร้อมเทคนิคการทำให้กรอบหอมและน่าทาน",
+                emoji: "🍪",
+                style: "cookie"
+            },
+
+            {
+                id: "stuffed-bread",
+                name: "คลาสขนมปังไส้ทะลัก",
+                description:
+                    "เรียนทำขนมปังไส้แน่น ไส้ทะลัก พร้อมเทคนิคขึ้นรูปและอบ",
+                emoji: "🥖",
+                style: "stuffed-bread"
+            },
+
+            {
+                id: "blueberry-cheesepie",
+                name: "คลาสบลูเบอรี่ชีสพาย",
+                description:
+                    "เรียนทำบลูเบอรี่ชีสพาย หอมมันละมุน พร้อมเทคนิคจัดชั้นให้สวย",
+                emoji: "🫐",
+                style: "cheesepie"
+            },
+
+            {
+                id: "banoffee",
+                name: "คลาสบานอฟฟี่",
+                description:
+                    "เรียนทำบานอฟฟี่ กล้วยหอม คาราเมล และครีมแบบลงตัว",
+                emoji: "🍌",
+                style: "banoffee"
+            },
+
+            {
+                id: "decorate-your-cake",
+                name: "คลาสแต่งเค้กตามใจ",
+                description:
+                    "ออกแบบและแต่งเค้กตามสไตล์ที่ชอบ พร้อมเรียนรู้เทคนิคการตกแต่ง",
+                emoji: "🎨",
+                style: "decorate-cake"
+            },
+
+            {
+                id: "fruit-cream-cheese-mochi",
+                name: "คลาสโมจิครีมชีสผลไม้สด",
+                description:
+                    "เรียนทำโมจินุ่ม ๆ สอดไส้ครีมชีสและผลไม้สด หอมหวานละมุน",
+                emoji: "🍓",
+                style: "mochi"
+            },
+
+            {
+                id: "pineapple-tart",
+                name: "คลาสทาร์ตสัปปะรด",
+                description:
+                    "เรียนทำทาร์ตสัปปะรด หอมเนย กรอบนอกนุ่มใน พร้อมเทคนิคการอบ",
+                emoji: "🍍",
+                style: "pineapple"
             }
 
         ];
@@ -1393,6 +1502,10 @@
 
                 }).join("");
 
+
+            /* =========================
+               LOAD COURSES TO SELECT
+            ========================= */
 
             courseSelect.innerHTML = `
                 <option value="">
@@ -1667,6 +1780,7 @@
                         "T00:00:00"
                     );
 
+
                 const today =
                     new Date();
 
@@ -1697,6 +1811,7 @@
 
                 const phonePattern =
                     /^[0-9]{9,10}$/;
+
 
                 if (
                     !phonePattern.test(phone)
