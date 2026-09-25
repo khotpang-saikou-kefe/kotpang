@@ -186,6 +186,268 @@
 
 
         /* =========================
+           SLIP UPLOAD
+        ========================= */
+
+        .slip-section {
+
+            margin-top: 24px;
+
+            padding: 20px;
+
+            border-radius: 20px;
+
+            background: #fff8ef;
+
+            border: 2px dashed #d7b99a;
+
+            text-align: left;
+
+        }
+
+
+        .slip-title {
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+
+            text-align: center;
+
+        }
+
+
+        .slip-description {
+
+            color: #777;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            text-align: center;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .file-label {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 14px;
+
+            background: #6b4630;
+
+            color: white;
+
+            text-align: center;
+
+            border-radius: 13px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+
+        }
+
+
+        .file-label:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        #slipFile {
+
+            display: none;
+
+        }
+
+
+        .paste-area {
+
+            margin-top: 12px;
+
+            padding: 15px;
+
+            border-radius: 13px;
+
+            background: white;
+
+            border: 1px solid #e3d4c5;
+
+            text-align: center;
+
+            color: #777;
+
+            cursor: text;
+
+            min-height: 55px;
+
+            outline: none;
+
+        }
+
+
+        .paste-area:focus {
+
+            border-color: #6b4630;
+
+        }
+
+
+        .preview-box {
+
+            display: none;
+
+            margin-top: 15px;
+
+            text-align: center;
+
+        }
+
+
+        .preview-box img {
+
+            max-width: 100%;
+
+            max-height: 400px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.10);
+
+        }
+
+
+        .file-name {
+
+            margin-top: 8px;
+
+            font-size: 14px;
+
+            color: #666;
+
+        }
+
+
+        .remove-slip {
+
+            margin-top: 10px;
+
+            border: none;
+
+            background: #eee;
+
+            color: #555;
+
+            padding: 8px 14px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =========================
+           SEND BUTTON
+        ========================= */
+
+        .submit-slip {
+
+            width: 100%;
+
+            margin-top: 15px;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background: #d58b45;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+        }
+
+
+        .submit-slip:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        .submit-slip:disabled {
+
+            background: #bbb;
+
+            cursor: not-allowed;
+
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status-box {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 16px;
+
+            border-radius: 15px;
+
+            background: #fff7df;
+
+            color: #795b00;
+
+            line-height: 1.7;
+
+            text-align: center;
+
+        }
+
+
+        .status-box.success {
+
+            background: #e9f8ed;
+
+            color: #236b35;
+
+        }
+
+
+        .status-box.error {
+
+            background: #fdecec;
+
+            color: #a33b3b;
+
+        }
+
+
+        /* =========================
            BUTTONS
         ========================= */
 
@@ -198,6 +460,8 @@
             justify-content: center;
 
             flex-wrap: wrap;
+
+            margin-top: 20px;
 
         }
 
@@ -265,6 +529,13 @@
 
             }
 
+
+            .slip-section {
+
+                padding: 15px;
+
+            }
+
         }
 
     </style>
@@ -292,6 +563,8 @@
 
             <p class="subtitle">
                 สแกน QR Code ด้านล่างเพื่อชำระเงิน
+                <br>
+                จากนั้นแนบสลิปเพื่อส่งให้ร้านตรวจสอบ
             </p>
 
 
@@ -407,9 +680,120 @@
             <p class="note">
 
                 กรุณาตรวจสอบจำนวนเงินก่อนชำระ
+                <br>
                 และเก็บหลักฐานการโอนเงินไว้
 
             </p>
+
+
+            <!-- =========================
+                 SLIP UPLOAD
+            ========================= -->
+
+            <div class="slip-section">
+
+                <div class="slip-title">
+                    📸 แนบสลิปการโอนเงิน
+                </div>
+
+
+                <div class="slip-description">
+
+                    หลังจากโอนเงินแล้ว
+                    กรุณาเลือกรูปสลิปจากเครื่อง
+                    <br>
+                    หรือกดในช่องด้านล่างแล้ววางรูปก็ได้
+
+                </div>
+
+
+                <!-- FILE UPLOAD -->
+
+                <label
+                    class="file-label"
+                    for="slipFile"
+                >
+                    📁 เลือกรูปสลิป
+                </label>
+
+
+                <input
+                    type="file"
+                    id="slipFile"
+                    accept="image/*"
+                >
+
+
+                <!-- PASTE IMAGE -->
+
+                <div
+                    class="paste-area"
+                    id="pasteArea"
+                    contenteditable="true"
+                    tabindex="0"
+                >
+
+                    📋 กดตรงนี้แล้ววางรูปสลิป
+                    <br>
+                    <small>
+                        (Ctrl + V / Command + V)
+                    </small>
+
+                </div>
+
+
+                <!-- PREVIEW -->
+
+                <div
+                    class="preview-box"
+                    id="previewBox"
+                >
+
+                    <img
+                        id="slipPreview"
+                        src=""
+                        alt="ตัวอย่างสลิป"
+                    >
+
+
+                    <div
+                        class="file-name"
+                        id="fileName"
+                    >
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="remove-slip"
+                        id="removeSlip"
+                    >
+                        ลบรูปสลิป
+                    </button>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="button"
+                    class="submit-slip"
+                    id="submitSlip"
+                >
+                    📤 ส่งสลิปการโอนเงิน
+                </button>
+
+
+                <!-- STATUS -->
+
+                <div
+                    class="status-box"
+                    id="statusBox"
+                >
+                </div>
+
+            </div>
 
 
             <!-- =========================
@@ -447,66 +831,155 @@
 
     <script>
 
+
+        /*
+        ==========================================
+        GOOGLE APPS SCRIPT
+        ==========================================
+        */
+
+        const APP_SCRIPT_URL =
+            "https://script.google.com/macros/s/AKfycbx2Fw-4ZdjYjDfxTVDikOkoODdQ6nK9RXzrHfJnmfoONYn11gFjAozJIKJ0nZrT9PKnQw/exec";
+
+
+        /*
+        ==========================================
+        ELEMENTS
+        ==========================================
+        */
+
+        const bookingNumberEl =
+            document.getElementById(
+                "bookingNumber"
+            );
+
+
+        const courseEl =
+            document.getElementById(
+                "course"
+            );
+
+
+        const dateEl =
+            document.getElementById(
+                "date"
+            );
+
+
+        const nameEl =
+            document.getElementById(
+                "name"
+            );
+
+
+        const phoneEl =
+            document.getElementById(
+                "phone"
+            );
+
+
+        const amountEl =
+            document.getElementById(
+                "amount"
+            );
+
+
+        const slipFile =
+            document.getElementById(
+                "slipFile"
+            );
+
+
+        const pasteArea =
+            document.getElementById(
+                "pasteArea"
+            );
+
+
+        const previewBox =
+            document.getElementById(
+                "previewBox"
+            );
+
+
+        const slipPreview =
+            document.getElementById(
+                "slipPreview"
+            );
+
+
+        const fileName =
+            document.getElementById(
+                "fileName"
+            );
+
+
+        const removeSlip =
+            document.getElementById(
+                "removeSlip"
+            );
+
+
+        const submitSlip =
+            document.getElementById(
+                "submitSlip"
+            );
+
+
+        const statusBox =
+            document.getElementById(
+                "statusBox"
+            );
+
+
+        let selectedSlip = null;
+
+
+        /*
+        ==========================================
+        LOAD BOOKING
+        ==========================================
+        */
+
         const raw =
-            sessionStorage.getItem(
+            localStorage.getItem(
                 "kotpangBooking"
             );
+
+
+        let bookingData = null;
 
 
         if (raw) {
 
             try {
 
-                const data =
+                bookingData =
                     JSON.parse(raw);
 
 
-                document
-                    .getElementById(
-                        "bookingNumber"
-                    )
-                    .textContent =
-                        data.bookingNumber || "-";
+                bookingNumberEl.textContent =
+                    bookingData.bookingNumber || "-";
 
 
-                document
-                    .getElementById(
-                        "course"
-                    )
-                    .textContent =
-                        data.course || "-";
+                courseEl.textContent =
+                    bookingData.course || "-";
 
 
-                document
-                    .getElementById(
-                        "date"
-                    )
-                    .textContent =
-                        data.date || "-";
+                dateEl.textContent =
+                    bookingData.date || "-";
 
 
-                document
-                    .getElementById(
-                        "name"
-                    )
-                    .textContent =
-                        data.name || "-";
+                nameEl.textContent =
+                    bookingData.name || "-";
 
 
-                document
-                    .getElementById(
-                        "phone"
-                    )
-                    .textContent =
-                        data.phone || "-";
+                phoneEl.textContent =
+                    bookingData.phone || "-";
 
 
-                document
-                    .getElementById(
-                        "amount"
-                    )
-                    .textContent =
-                        data.amount || 200;
+                amountEl.textContent =
+                    bookingData.amount || 200;
 
 
             } catch (error) {
@@ -519,6 +992,462 @@
             }
 
         }
+
+
+        /*
+        ==========================================
+        SHOW SLIP PREVIEW
+        ==========================================
+        */
+
+        function showSlip(file) {
+
+            if (!file) {
+                return;
+            }
+
+
+            if (!file.type.startsWith("image/")) {
+
+                alert(
+                    "กรุณาเลือกไฟล์รูปภาพเท่านั้น"
+                );
+
+                return;
+
+            }
+
+
+            selectedSlip = file;
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    slipPreview.src =
+                        event.target.result;
+
+
+                    previewBox.style.display =
+                        "block";
+
+
+                    fileName.textContent =
+                        file.name ||
+                        "รูปสลิปที่วางจาก Clipboard";
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+
+
+        /*
+        ==========================================
+        SELECT FILE
+        ==========================================
+        */
+
+        slipFile.addEventListener(
+            "change",
+            function() {
+
+                const file =
+                    this.files[0];
+
+                showSlip(file);
+
+            }
+        );
+
+
+        /*
+        ==========================================
+        PASTE IMAGE
+        ==========================================
+        */
+
+        pasteArea.addEventListener(
+            "paste",
+            function(event) {
+
+                const items =
+                    event.clipboardData.items;
+
+
+                for (
+                    const item of items
+                ) {
+
+                    if (
+                        item.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+
+                        const file =
+                            item.getAsFile();
+
+
+                        showSlip(file);
+
+
+                        event.preventDefault();
+
+
+                        break;
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        /*
+        ==========================================
+        REMOVE SLIP
+        ==========================================
+        */
+
+        removeSlip.addEventListener(
+            "click",
+            function() {
+
+                selectedSlip = null;
+
+
+                slipFile.value = "";
+
+
+                slipPreview.src = "";
+
+
+                fileName.textContent = "";
+
+
+                previewBox.style.display =
+                    "none";
+
+            }
+        );
+
+
+        /*
+        ==========================================
+        SHOW STATUS
+        ==========================================
+        */
+
+        function showStatus(
+            message,
+            type = ""
+        ) {
+
+            statusBox.textContent =
+                message;
+
+
+            statusBox.className =
+                "status-box " + type;
+
+
+            statusBox.style.display =
+                "block";
+
+        }
+
+
+        /*
+        ==========================================
+        CONVERT IMAGE TO BASE64
+        ==========================================
+        */
+
+        function fileToBase64(file) {
+
+            return new Promise(
+                function(resolve, reject) {
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        function() {
+
+                            /*
+                            ผลลัพธ์จะเป็น
+
+                            data:image/png;base64,XXXX
+
+                            เราต้องส่งเฉพาะ XXXX
+                            */
+
+                            const result =
+                                reader.result;
+
+
+                            const base64 =
+                                result.split(",")[1];
+
+
+                            resolve(base64);
+
+                        };
+
+
+                    reader.onerror =
+                        function(error) {
+
+                            reject(error);
+
+                        };
+
+
+                    reader.readAsDataURL(file);
+
+                }
+            );
+
+        }
+
+
+        /*
+        ==========================================
+        SUBMIT SLIP
+        ==========================================
+        */
+
+        submitSlip.addEventListener(
+            "click",
+            async function() {
+
+
+                /*
+                ตรวจสอบการจอง
+                */
+
+                if (!bookingData) {
+
+                    showStatus(
+                        "ไม่พบข้อมูลการจอง กรุณากลับไปทำรายการใหม่",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                ตรวจสอบสลิป
+                */
+
+                if (!selectedSlip) {
+
+                    showStatus(
+                        "กรุณาแนบรูปสลิปก่อนส่ง",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                ตรวจสอบขนาดไฟล์
+                */
+
+                if (
+                    selectedSlip.size >
+                    10 * 1024 * 1024
+                ) {
+
+                    showStatus(
+                        "รูปสลิปมีขนาดใหญ่เกิน 10 MB",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                try {
+
+
+                    submitSlip.disabled =
+                        true;
+
+
+                    submitSlip.textContent =
+                        "⏳ กำลังส่งสลิป...";
+
+
+                    showStatus(
+                        "กำลังอัปโหลดสลิป กรุณารอสักครู่..."
+                    );
+
+
+                    /*
+                    แปลงรูปเป็น Base64
+                    */
+
+                    const base64 =
+                        await fileToBase64(
+                            selectedSlip
+                        );
+
+
+                    /*
+                    ข้อมูลที่จะส่ง
+                    */
+
+                    const paymentData = {
+
+                        action:
+                            "uploadSlip",
+
+                        bookingNumber:
+                            bookingData.bookingNumber,
+
+                        name:
+                            bookingData.name,
+
+                        phone:
+                            bookingData.phone,
+
+                        course:
+                            bookingData.course,
+
+                        date:
+                            bookingData.date,
+
+                        amount:
+                            bookingData.amount || 200,
+
+                        fileName:
+                            selectedSlip.name ||
+                            "payment-slip.jpg",
+
+                        mimeType:
+                            selectedSlip.type,
+
+                        slipBase64:
+                            base64
+
+                    };
+
+
+                    /*
+                    ส่งไป Google Apps Script
+                    */
+
+                    await fetch(
+                        APP_SCRIPT_URL,
+                        {
+
+                            method: "POST",
+
+                            mode: "no-cors",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    paymentData
+                                )
+
+                        }
+                    );
+
+
+                    /*
+                    บันทึกสถานะในเครื่องลูกค้า
+                    */
+
+                    const updatedBooking = {
+
+                        ...bookingData,
+
+                        status:
+                            "รอตรวจสอบสลิป",
+
+                        paymentStatus:
+                            "รอตรวจสอบสลิป",
+
+                        slipSubmitted:
+                            true,
+
+                        slipSubmittedAt:
+                            new Date().toISOString()
+
+                    };
+
+
+                    localStorage.setItem(
+                        "kotpangBooking",
+                        JSON.stringify(
+                            updatedBooking
+                        )
+                    );
+
+
+                    /*
+                    แสดงผล
+                    */
+
+                    showStatus(
+                        "ส่งสลิปเรียบร้อยแล้ว ✅ กรุณารอร้านตรวจสอบการชำระเงิน",
+                        "success"
+                    );
+
+
+                    submitSlip.textContent =
+                        "✅ ส่งสลิปแล้ว";
+
+
+                } catch (error) {
+
+
+                    console.error(
+                        "ส่งสลิปไม่สำเร็จ:",
+                        error
+                    );
+
+
+                    showStatus(
+                        "เกิดข้อผิดพลาดในการส่งสลิป กรุณาลองใหม่อีกครั้ง",
+                        "error"
+                    );
+
+
+                    submitSlip.disabled =
+                        false;
+
+
+                    submitSlip.textContent =
+                        "📤 ส่งสลิปการโอนเงิน";
+
+                }
+
+            }
+        );
+
 
     </script>
 
