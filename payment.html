@@ -831,214 +831,388 @@
 
     <script>
 
-
-        /*
-        ==========================================
-        GOOGLE APPS SCRIPT
-        ==========================================
-        */
-
-        const APP_SCRIPT_URL =
-            "https://script.google.com/macros/s/AKfycbx2Fw-4ZdjYjDfxTVDikOkoODdQ6nK9RXzrHfJnmfoONYn11gFjAozJIKJ0nZrT9PKnQw/exec";
+const APP_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbx2Fw-4ZdjYjDfxTVDikOkoODdQ6nK9RXzrHfJnmfoONYn11gFjAozJIKJ0nZrT9PKnQw/exec";
 
 
-        /*
-        ==========================================
-        ELEMENTS
-        ==========================================
-        */
+/* =====================================================
+   GET BOOKING DATA
+===================================================== */
 
-        const bookingNumberEl =
-            document.getElementById(
-                "bookingNumber"
+const bookingData =
+    JSON.parse(
+        localStorage.getItem("kotpangBooking")
+    );
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const bookingNumber =
+    document.getElementById("bookingNumber");
+
+const course =
+    document.getElementById("course");
+
+const date =
+    document.getElementById("date");
+
+const name =
+    document.getElementById("name");
+
+const phone =
+    document.getElementById("phone");
+
+const status =
+    document.getElementById("status");
+
+const slipInput =
+    document.getElementById("slip");
+
+const preview =
+    document.getElementById("preview");
+
+const previewImage =
+    document.getElementById("previewImage");
+
+const sendSlipButton =
+    document.getElementById("sendSlipButton");
+
+const message =
+    document.getElementById("message");
+
+
+/* =====================================================
+   CHECK BOOKING
+===================================================== */
+
+if (!bookingData || !bookingData.bookingNumber) {
+
+    bookingNumber.textContent = "-";
+    course.textContent = "-";
+    date.textContent = "-";
+    name.textContent = "-";
+    phone.textContent = "-";
+
+    message.innerHTML = `
+        <strong>❌ ไม่พบข้อมูลการจอง</strong>
+        <br><br>
+        กรุณากลับไปหน้าจอง
+        แล้วทำรายการจองใหม่อีกครั้ง
+    `;
+
+    message.style.display = "block";
+
+    sendSlipButton.disabled = true;
+
+} else {
+
+    /* =================================================
+       SHOW BOOKING DATA
+    ================================================= */
+
+    bookingNumber.textContent =
+        bookingData.bookingNumber || "-";
+
+    course.textContent =
+        bookingData.course || "-";
+
+    date.textContent =
+        bookingData.date || "-";
+
+    name.textContent =
+        bookingData.name || "-";
+
+    phone.textContent =
+        bookingData.phone || "-";
+
+
+    status.textContent =
+        bookingData.status ||
+        "รอการชำระเงิน";
+
+}
+
+
+/* =====================================================
+   SELECT SLIP
+===================================================== */
+
+slipInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            this.files[0];
+
+        if (!file) {
+            return;
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+            alert(
+                "กรุณาเลือกไฟล์รูปภาพเท่านั้น"
             );
 
+            this.value = "";
 
-        const courseEl =
-            document.getElementById(
-                "course"
+            return;
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function (event) {
+
+                previewImage.src =
+                    event.target.result;
+
+                preview.style.display =
+                    "block";
+
+            };
+
+
+        reader.readAsDataURL(file);
+
+        sendSlipButton.disabled =
+            false;
+
+    }
+);
+
+
+/* =====================================================
+   SEND SLIP
+===================================================== */
+
+sendSlipButton.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !bookingData ||
+            !bookingData.bookingNumber
+        ) {
+
+            alert(
+                "ไม่พบข้อมูลการจอง"
             );
 
-
-        const dateEl =
-            document.getElementById(
-                "date"
-            );
-
-
-        const nameEl =
-            document.getElementById(
-                "name"
-            );
-
-
-        const phoneEl =
-            document.getElementById(
-                "phone"
-            );
-
-
-        const amountEl =
-            document.getElementById(
-                "amount"
-            );
-
-
-        const slipFile =
-            document.getElementById(
-                "slipFile"
-            );
-
-
-        const pasteArea =
-            document.getElementById(
-                "pasteArea"
-            );
-
-
-        const previewBox =
-            document.getElementById(
-                "previewBox"
-            );
-
-
-        const slipPreview =
-            document.getElementById(
-                "slipPreview"
-            );
-
-
-        const fileName =
-            document.getElementById(
-                "fileName"
-            );
-
-
-        const removeSlip =
-            document.getElementById(
-                "removeSlip"
-            );
-
-
-        const submitSlip =
-            document.getElementById(
-                "submitSlip"
-            );
-
-
-        const statusBox =
-            document.getElementById(
-                "statusBox"
-            );
-
-
-        let selectedSlip = null;
-
-
-        /*
-        ==========================================
-        LOAD BOOKING
-        ==========================================
-        */
-
-        const raw =
-            localStorage.getItem(
-                "kotpangBooking"
-            );
-
-
-        let bookingData = null;
-
-
-        if (raw) {
-
-            try {
-
-                bookingData =
-                    JSON.parse(raw);
-
-
-                bookingNumberEl.textContent =
-                    bookingData.bookingNumber || "-";
-
-
-                courseEl.textContent =
-                    bookingData.course || "-";
-
-
-                dateEl.textContent =
-                    bookingData.date || "-";
-
-
-                nameEl.textContent =
-                    bookingData.name || "-";
-
-
-                phoneEl.textContent =
-                    bookingData.phone || "-";
-
-
-                amountEl.textContent =
-                    bookingData.amount || 200;
-
-
-            } catch (error) {
-
-                console.error(
-                    "ไม่สามารถอ่านข้อมูลการจองได้",
-                    error
-                );
-
-            }
+            return;
 
         }
 
 
-        /*
-        ==========================================
-        SHOW SLIP PREVIEW
-        ==========================================
-        */
-
-        function showSlip(file) {
-
-            if (!file) {
-                return;
-            }
+        const file =
+            slipInput.files[0];
 
 
-            if (!file.type.startsWith("image/")) {
+        if (!file) {
 
-                alert(
-                    "กรุณาเลือกไฟล์รูปภาพเท่านั้น"
+            alert(
+                "กรุณาแนบสลิปก่อน"
+            );
+
+            return;
+
+        }
+
+
+        sendSlipButton.disabled =
+            true;
+
+        sendSlipButton.textContent =
+            "⏳ กำลังส่งสลิป...";
+
+
+        try {
+
+            const base64 =
+                await convertImageToBase64(
+                    file
                 );
 
-                return;
 
-            }
+            const payload = {
+
+                action:
+                    "uploadSlip",
+
+                bookingNumber:
+                    bookingData.bookingNumber,
+
+                course:
+                    bookingData.course,
+
+                date:
+                    bookingData.date,
+
+                name:
+                    bookingData.name,
+
+                phone:
+                    bookingData.phone,
+
+                amount:
+                    bookingData.amount || 200,
+
+                fileName:
+                    file.name,
+
+                mimeType:
+                    file.type,
+
+                slipBase64:
+                    base64
+
+            };
 
 
-            selectedSlip = file;
+            await fetch(
+                APP_SCRIPT_URL,
+                {
 
+                    method:
+                        "POST",
+
+                    mode:
+                        "no-cors",
+
+                    headers: {
+
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+
+                }
+            );
+
+
+            /* =========================================
+               UPDATE LOCAL STATUS
+            ========================================= */
+
+            bookingData.status =
+                "รอตรวจสอบสลิป";
+
+            bookingData.paymentStatus =
+                "รอตรวจสอบสลิป";
+
+            bookingData.slipSubmitted =
+                true;
+
+
+            localStorage.setItem(
+                "kotpangBooking",
+                JSON.stringify(
+                    bookingData
+                )
+            );
+
+
+            status.textContent =
+                "รอตรวจสอบสลิป";
+
+
+            message.innerHTML = `
+                <strong>
+                    ✅ ส่งสลิปเรียบร้อยแล้ว
+                </strong>
+
+                <br><br>
+
+                ทางร้านได้รับสลิปแล้ว
+                กรุณารอแอดมินตรวจสอบการชำระเงิน
+            `;
+
+            message.style.display =
+                "block";
+
+
+            sendSlipButton.textContent =
+                "✅ ส่งสลิปแล้ว";
+
+
+        } catch (error) {
+
+            console.error(
+                "Slip upload error:",
+                error
+            );
+
+
+            message.innerHTML = `
+                <strong>
+                    ❌ ส่งสลิปไม่สำเร็จ
+                </strong>
+
+                <br><br>
+
+                กรุณาลองใหม่อีกครั้ง
+            `;
+
+            message.style.display =
+                "block";
+
+
+            sendSlipButton.disabled =
+                false;
+
+            sendSlipButton.textContent =
+                "📤 ส่งสลิป";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CONVERT IMAGE TO BASE64
+===================================================== */
+
+function convertImageToBase64(file) {
+
+    return new Promise(
+        function (resolve, reject) {
 
             const reader =
                 new FileReader();
 
 
             reader.onload =
-                function(event) {
+                function () {
 
-                    slipPreview.src =
-                        event.target.result;
-
-
-                    previewBox.style.display =
-                        "block";
+                    const result =
+                        reader.result;
 
 
-                    fileName.textContent =
-                        file.name ||
-                        "รูปสลิปที่วางจาก Clipboard";
+                    const base64 =
+                        result.split(",")[1];
+
+
+                    resolve(base64);
+
+                };
+
+
+            reader.onerror =
+                function (error) {
+
+                    reject(error);
 
                 };
 
@@ -1046,412 +1220,158 @@
             reader.readAsDataURL(file);
 
         }
+    );
 
+}
 
-        /*
-        ==========================================
-        SELECT FILE
-        ==========================================
-        */
 
-        slipFile.addEventListener(
-            "change",
-            function() {
+/* =====================================================
+   CHECK BOOKING STATUS
+===================================================== */
 
-                const file =
-                    this.files[0];
+function checkBookingStatus() {
 
-                showSlip(file);
+    if (
+        !bookingData ||
+        !bookingData.bookingNumber
+    ) {
 
-            }
-        );
+        return;
 
+    }
 
-        /*
-        ==========================================
-        PASTE IMAGE
-        ==========================================
-        */
 
-        pasteArea.addEventListener(
-            "paste",
-            function(event) {
+    const callbackName =
+        "bookingCallback_" +
+        Date.now();
 
-                const items =
-                    event.clipboardData.items;
 
+    window[callbackName] =
+        function (data) {
 
-                for (
-                    const item of items
-                ) {
-
-                    if (
-                        item.type.startsWith(
-                            "image/"
-                        )
-                    ) {
-
-                        const file =
-                            item.getAsFile();
-
-
-                        showSlip(file);
-
-
-                        event.preventDefault();
-
-
-                        break;
-
-                    }
-
-                }
-
-            }
-        );
-
-
-        /*
-        ==========================================
-        REMOVE SLIP
-        ==========================================
-        */
-
-        removeSlip.addEventListener(
-            "click",
-            function() {
-
-                selectedSlip = null;
-
-
-                slipFile.value = "";
-
-
-                slipPreview.src = "";
-
-
-                fileName.textContent = "";
-
-
-                previewBox.style.display =
-                    "none";
-
-            }
-        );
-
-
-        /*
-        ==========================================
-        SHOW STATUS
-        ==========================================
-        */
-
-        function showStatus(
-            message,
-            type = ""
-        ) {
-
-            statusBox.textContent =
-                message;
-
-
-            statusBox.className =
-                "status-box " + type;
-
-
-            statusBox.style.display =
-                "block";
-
-        }
-
-
-        /*
-        ==========================================
-        CONVERT IMAGE TO BASE64
-        ==========================================
-        */
-
-        function fileToBase64(file) {
-
-            return new Promise(
-                function(resolve, reject) {
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload =
-                        function() {
-
-                            /*
-                            ผลลัพธ์จะเป็น
-
-                            data:image/png;base64,XXXX
-
-                            เราต้องส่งเฉพาะ XXXX
-                            */
-
-                            const result =
-                                reader.result;
-
-
-                            const base64 =
-                                result.split(",")[1];
-
-
-                            resolve(base64);
-
-                        };
-
-
-                    reader.onerror =
-                        function(error) {
-
-                            reject(error);
-
-                        };
-
-
-                    reader.readAsDataURL(file);
-
-                }
-            );
-
-        }
-
-
-        /*
-        ==========================================
-        SUBMIT SLIP
-        ==========================================
-        */
-
-        submitSlip.addEventListener(
-            "click",
-            async function() {
-
-
-                /*
-                ตรวจสอบการจอง
-                */
-
-                if (!bookingData) {
-
-                    showStatus(
-                        "ไม่พบข้อมูลการจอง กรุณากลับไปทำรายการใหม่",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                /*
-                ตรวจสอบสลิป
-                */
-
-                if (!selectedSlip) {
-
-                    showStatus(
-                        "กรุณาแนบรูปสลิปก่อนส่ง",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                /*
-                ตรวจสอบขนาดไฟล์
-                */
+            try {
 
                 if (
-                    selectedSlip.size >
-                    10 * 1024 * 1024
+                    data &&
+                    data.success &&
+                    data.booking
                 ) {
 
-                    showStatus(
-                        "รูปสลิปมีขนาดใหญ่เกิน 10 MB",
-                        "error"
-                    );
-
-                    return;
-
-                }
+                    const latest =
+                        data.booking;
 
 
-                try {
+                    /* ================================
+                       UPDATE LOCAL DATA
+                    ================================= */
+
+                    bookingData.status =
+                        latest.status ||
+                        bookingData.status;
 
 
-                    submitSlip.disabled =
-                        true;
+                    bookingData.slipSubmitted =
+                        latest.slipSubmitted ||
+                        bookingData.slipSubmitted;
 
 
-                    submitSlip.textContent =
-                        "⏳ กำลังส่งสลิป...";
-
-
-                    showStatus(
-                        "กำลังอัปโหลดสลิป กรุณารอสักครู่..."
-                    );
-
-
-                    /*
-                    แปลงรูปเป็น Base64
-                    */
-
-                    const base64 =
-                        await fileToBase64(
-                            selectedSlip
-                        );
-
-
-                    /*
-                    ข้อมูลที่จะส่ง
-                    */
-
-                    const paymentData = {
-
-                        action:
-                            "uploadSlip",
-
-                        bookingNumber:
-                            bookingData.bookingNumber,
-
-                        name:
-                            bookingData.name,
-
-                        phone:
-                            bookingData.phone,
-
-                        course:
-                            bookingData.course,
-
-                        date:
-                            bookingData.date,
-
-                        amount:
-                            bookingData.amount || 200,
-
-                        fileName:
-                            selectedSlip.name ||
-                            "payment-slip.jpg",
-
-                        mimeType:
-                            selectedSlip.type,
-
-                        slipBase64:
-                            base64
-
-                    };
-
-
-                    /*
-                    ส่งไป Google Apps Script
-                    */
-
-                    await fetch(
-                        APP_SCRIPT_URL,
-                        {
-
-                            method: "POST",
-
-                            mode: "no-cors",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
-
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    paymentData
-                                )
-
-                        }
-                    );
-
-
-                    /*
-                    บันทึกสถานะในเครื่องลูกค้า
-                    */
-
-                    const updatedBooking = {
-
-                        ...bookingData,
-
-                        status:
-                            "รอตรวจสอบสลิป",
-
-                        paymentStatus:
-                            "รอตรวจสอบสลิป",
-
-                        slipSubmitted:
-                            true,
-
-                        slipSubmittedAt:
-                            new Date().toISOString()
-
-                    };
+                    bookingData.slipUrl =
+                        latest.slipUrl ||
+                        bookingData.slipUrl;
 
 
                     localStorage.setItem(
                         "kotpangBooking",
                         JSON.stringify(
-                            updatedBooking
+                            bookingData
                         )
                     );
 
 
-                    /*
-                    แสดงผล
-                    */
+                    /* ================================
+                       UPDATE SCREEN
+                    ================================= */
 
-                    showStatus(
-                        "ส่งสลิปเรียบร้อยแล้ว ✅ กรุณารอร้านตรวจสอบการชำระเงิน",
-                        "success"
-                    );
+                    status.textContent =
+                        bookingData.status;
 
 
-                    submitSlip.textContent =
-                        "✅ ส่งสลิปแล้ว";
+                    if (
+                        bookingData.status ===
+                        "ชำระเงินแล้ว"
+                    ) {
 
+                        status.style.color =
+                            "#2e8b57";
 
-                } catch (error) {
+                    }
 
+                }
 
-                    console.error(
-                        "ส่งสลิปไม่สำเร็จ:",
-                        error
-                    );
+            } finally {
 
+                delete window[
+                    callbackName
+                ];
 
-                    showStatus(
-                        "เกิดข้อผิดพลาดในการส่งสลิป กรุณาลองใหม่อีกครั้ง",
-                        "error"
-                    );
+                if (script) {
 
-
-                    submitSlip.disabled =
-                        false;
-
-
-                    submitSlip.textContent =
-                        "📤 ส่งสลิปการโอนเงิน";
+                    script.remove();
 
                 }
 
             }
+
+        };
+
+
+    const script =
+        document.createElement(
+            "script"
         );
 
 
-    </script>
+    script.src =
+        APP_SCRIPT_URL +
+        "?action=getBooking" +
+        "&bookingNumber=" +
+        encodeURIComponent(
+            bookingData.bookingNumber
+        ) +
+        "&callback=" +
+        callbackName +
+        "&t=" +
+        Date.now();
 
 
-</body>
+    script.onerror =
+        function () {
 
-</html>
+            delete window[
+                callbackName
+            ];
+
+            script.remove();
+
+        };
+
+
+    document.body.appendChild(
+        script
+    );
+
+}
+
+
+/* =====================================================
+   CHECK EVERY 30 SECONDS
+===================================================== */
+
+checkBookingStatus();
+
+setInterval(
+    checkBookingStatus,
+    30000
+);
+
+</script>
