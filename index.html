@@ -1977,30 +1977,42 @@
                    สำหรับหน้า payment.html
                 ================================================= */
 
-                sessionStorage.setItem(
-                    "kotpangBooking",
-                    JSON.stringify({
+                localStorage.setItem(
+    "kotpangBooking",
+    JSON.stringify({
 
-                        bookingNumber:
-                            bookingNumber,
+        bookingNumber:
+            bookingNumber,
 
-                        course:
-                            selectedCourse.name,
+        courseId:
+            selectedCourse.id,
 
-                        date:
-                            date,
+        course:
+            selectedCourse.name,
 
-                        name:
-                            name,
+        date:
+            date,
 
-                        phone:
-                            phone,
+        name:
+            name,
 
-                        amount:
-                            200
+        phone:
+            phone,
 
-                    })
-                );
+        amount:
+            200,
+
+        status:
+            "รอการยืนยัน",
+
+        paymentStatus:
+            "รอการชำระเงิน",
+
+        slipSubmitted:
+            false
+
+    })
+);
 
 
                 /* =================================================
